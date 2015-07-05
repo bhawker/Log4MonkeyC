@@ -166,10 +166,14 @@ module Log4MonkeyC {
 			}
     		
     		// TODO - Handle imperial date (date/month/year), display AM/PM for 12 hour time, use format methods
-			var dateString = timeInfo.month + "-" + timeInfo.day + "-" + timeInfo.year;
-			var timeString = hour + ":" + timeInfo.min + ":" + timeInfo.sec; 
+			var dateString = timeInfo.month.format("%02d") + "-" + timeInfo.day.format("%02d") + "-" + timeInfo.year.format("%04d");
 			
-			timeString = hour.format("%02d") + ":" + timeInfo.min.format("%02d") + ":" + timeInfo.sec.format("%02d");
+			var min = timeInfo.min;
+    		var sec = timeInfo.sec;	
+    		var timeString = hour.format("%02d") + ":" + min.format("%02d") + ":" + sec.format("%02d");
+    		if (!is24HourTime) {
+    			timeString += timeInfo.hour < 12 ? " AM" : " PM"; 
+    		}
 			return dateString + " - " + timeString;
 		}
 	}
