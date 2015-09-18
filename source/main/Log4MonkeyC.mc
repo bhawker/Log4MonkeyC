@@ -59,6 +59,9 @@ module Log4MonkeyC {
 	
 	//! Class used for logging nessages based on provided configuration
 	class Logger {
+		hidden const DEFAULT_ERROR_EXCEPTION_MESSAGE = "An error occurred";
+		hidden const DEFAULT_FATAL_EXCEPTION_MESSAGE = "A fatal error occurred";
+	
 		hidden var name;		
 		hidden var config;
 		hidden var logLevel;	
@@ -134,12 +137,54 @@ module Log4MonkeyC {
 			}
 		}
 		
+		//! Writes an Error exception stack trace preceeded by the default identifying message
+		//!
+		//! @param exception [Exception] Exception to write
+		function errorException(exception) {
+			if (isErrorEnabled()) {
+				writeMessage(DEFAULT_ERROR_EXCEPTION_MESSAGE, "ERROR");
+				exception.printStackTrace();
+			}
+		}
+		
+		//! Writes an Error exception stack trace preceeded by the provided identifying message
+		//!
+		//! @param message [Object] Message to write
+		//! @param exception [Exception] Exception to write
+		function errorExceptionAndMsg(message, exception) {
+			if (isErrorEnabled()) {
+				writeMessage(message, "ERROR");
+				exception.printStackTrace();
+			}
+		}
+		
 		//! Writes a Fatal message if enabled
 		//!
 		//! @param message [Object] Message to write
 		function fatal(message) {
 			if (isFatalEnabled()) {
 				writeMessage(message, "FATAL");
+			}
+		}
+		
+		//! Writes a Fatal exception stack trace preceeded by the default identifying message
+		//!
+		//! @param exception [Exception] Exception to write
+		function fatalException(exception) {
+			if (isFatalEnabled()) {
+				writeMessage(DEFAULT_FATAL_EXCEPTION_MESSAGE, "FATAL");
+				exception.printStackTrace();
+			}
+		}
+		
+		//! Writes a Fatal exception stack trace preceeded by the provided identifying message
+		//!
+		//! @param message [Object] Message to write
+		//! @param exception [Exception] Exception to write
+		function fatalExceptionAndMsg(message, exception) {
+			if (isFatalEnabled()) {
+				writeMessage(message, "FATAL");
+				exception.printStackTrace();
 			}
 		}
 		

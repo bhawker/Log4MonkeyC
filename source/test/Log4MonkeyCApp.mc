@@ -1,5 +1,6 @@
 using Toybox.Application as App;
 using Toybox.WatchUi as Ui;
+using Toybox.Lang as Ciq;
 using Log4MonkeyC as Log;
 
 //! Simple test harness app for experimenting with the Log4MonkeyC module
@@ -14,7 +15,10 @@ class Log4MonkeyCTestHarness extends App.AppBase {
 		Log4MonkeyC.setLogConfig(config);
 		
 		logger = Log.getLogger("Log4MonkeyCTestHarness");
-		testLogLevels();		
+		
+		testMessages();
+		testErrorExceptions();
+		testFatalExceptions();		
     }
 
     //! onStop() is called when your application is exiting
@@ -26,12 +30,44 @@ class Log4MonkeyCTestHarness extends App.AppBase {
         return [ new Log4MonkeyCView() ];
     }
     
-    hidden function testLogLevels() {
+    hidden function testMessages() {
     	logger.debug("Debug Message");
     	logger.info("Info Message");
     	logger.warn("Warn Message");
     	logger.error("Error Message");
     	logger.fatal("Fatal Message");
+    }
+    
+    hidden function testErrorExceptions() {
+    	// Log an exception as an error
+    	try {
+    		throw new Ciq.Exception();
+    	} catch (e1) {
+    		logger.errorException(e1);
+    	}
+    	
+    	// Log an exception with an identifying message as an error
+		try {
+    		throw new Ciq.Exception();
+    	} catch (e2) {
+    		logger.errorExceptionAndMsg("Custom error exception message", e2);
+    	}
+    }
+    
+    hidden function testFatalExceptions() {
+   	    // Log an exception as fatal
+    	try {
+    		throw new Ciq.Exception();
+    	} catch (e1) {
+    		logger.fatalException(e1);
+    	}
+    	
+    	// Log an exception with an identifying message as fatal
+		try {
+    		throw new Ciq.Exception();
+    	} catch (e2) {
+    		logger.fatalExceptionAndMsg("Custom fatal exception message", e2);
+    	}
     }
 
 }
