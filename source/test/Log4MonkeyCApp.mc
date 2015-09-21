@@ -1,21 +1,29 @@
 using Toybox.Application as App;
 using Toybox.WatchUi as Ui;
 using Toybox.Lang as Ciq;
+using Toybox.Time as Time;
 using Log4MonkeyC as Log;
 
-//! Simple test harness app for experimenting with the Log4MonkeyC module
+//! Simple test harness/how-to app for experimenting with the Log4MonkeyC module
 class Log4MonkeyCTestHarness extends App.AppBase {
 	var logger;
 
     //! onStart() is called on application start up
     function onStart() {
-    	var debugLevel = Log.DEBUG;
-    	var config = new Log4MonkeyC.Config();
-		config.setLogLevel(debugLevel);
+    	// Construct logging Config
+		// Using dictionary...
+		var config = new Log4MonkeyC.Config();
+    	config.init({ Log.LOG_LEVEL_KEY => Log.DEBUG, Log.DATE_FORMAT_KEY => Time.FORMAT_SHORT });
+    	// ...or builder
+		//var config = new Log4MonkeyC.Config().setLogLevel(Log.DEBUG).setDateFormat(Time.FORMAT_SHORT);
+		
+		// Set Config on module to be used for subsequently created Loggers
 		Log4MonkeyC.setLogConfig(config);
 		
+		// Create Logger
 		logger = Log.getLogger("Log4MonkeyCTestHarness");
 		
+		// Test logging
 		testMessages();
 		testErrorExceptions();
 		testFatalExceptions();		
