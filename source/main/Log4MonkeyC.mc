@@ -252,27 +252,28 @@ module Log4MonkeyC {
     		var dateFormat = config.getDateFormat();
     		
     		var timeInfo = Cal.info(Time.now(), dateFormat);
+    		var dateString;
     		if (dateFormat == Time.FORMAT_SHORT) {
-	    		var hour = timeInfo.hour;
-	    		if (!is24HourTime) {
-		    		hour = hour % 12;
-		    		hour = (hour == 0) ? 12 : hour;
-				}
-	    		
 	    		// TODO - Handle imperial date (date/month/year)?
-				var dateString = timeInfo.month.format("%02d") + "-" + timeInfo.day.format("%02d") + "-" + timeInfo.year.format("%04d");
-	
-				var min = timeInfo.min;
-	    		var sec = timeInfo.sec;	
-	    		var timeString = hour.format("%02d") + ":" + min.format("%02d") + ":" + sec.format("%02d");
-	    		if (!is24HourTime) {
-	    			timeString += timeInfo.hour < 12 ? " AM" : " PM"; 
-	    		}
-				return dateString + " " + timeString;
+				dateString = timeInfo.month.format("%02d") + "-" + timeInfo.day.format("%02d") + "-" + timeInfo.year.format("%04d");
+				
     		} else {
-    			// TODO - implement!
-				return "";
+    			dateString = timeInfo.month + "-" + timeInfo.day + "-" + timeInfo.year;
     		}
+    		
+    		var hour = timeInfo.hour;
+    		if (!is24HourTime) {
+	    		hour = hour % 12;
+	    		hour = (hour == 0) ? 12 : hour;
+			}
+			var min = timeInfo.min;
+    		var sec = timeInfo.sec;	
+    		var timeString = hour.format("%02d") + ":" + min.format("%02d") + ":" + sec.format("%02d");
+    		if (!is24HourTime) {
+    			timeString += timeInfo.hour < 12 ? " AM" : " PM"; 
+    		}
+    		
+    		return dateString + " " + timeString;
 		}
 	}
 	
